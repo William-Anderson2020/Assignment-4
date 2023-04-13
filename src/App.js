@@ -60,16 +60,20 @@ class App extends Component {
     );
   }
 
+  //Add debit to debit array & update accountBalance
   addDebit = (e) => {
     e.preventDefault()
     let debitInfo = e.target
+    //Create debit object to be added to array
     let debit = {
       id: this.state.debitList.length,
       amount: debitInfo.amount.value,
       description: debitInfo.description.value
     };
+    //Format date and add to obj
     let date = new Date()
     debit.date = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    //Update balance and array
     this.setState({
       accountBalance: (this.state.accountBalance - debit.amount).toFixed(2)
     });
