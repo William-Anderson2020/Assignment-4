@@ -36,7 +36,7 @@ class App extends Component {
   }
 
   // Create Routes and React elements to be rendered using React components
-  render() {  
+  render() {
     // Create React elements and pass input props to components
     const HomeComponent = () => (<Home accountBalance={this.state.accountBalance} />)
     const UserProfileComponent = () => (
@@ -44,7 +44,7 @@ class App extends Component {
     )
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
     const CreditsComponent = () => (<Credits credits={this.state.creditList} />) 
-    const DebitsComponent = () => (<Debits debits={this.state.debitList} />) 
+    const DebitsComponent = () => (<Debits debits={this.state.debitList} addDebit={this.addDebit} accountBalance={this.state.accountBalance} />) 
 
     // Important: Include the "basename" in Router, which is needed for deploying the React app to GitHub Pages
     return (
@@ -58,6 +58,22 @@ class App extends Component {
         </div>
       </Router>
     );
+  }
+
+  addDebit = (e) => {
+    e.preventDefault()
+    let debitInfo = e.target
+    let debit = {
+      id: this.state.debitList.length,
+      amount: debitInfo.amount.value,
+      description: debitInfo.description.value
+    };
+    let date = new Date()
+    debit.date = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    this.setState({
+      accountBalance: (this.state.accountBalance - debit.amount).toFixed(2)
+    });
+    this.state.debitList.push(debit);
   }
 }
 
