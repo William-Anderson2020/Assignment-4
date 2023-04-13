@@ -43,7 +43,7 @@ class App extends Component {
       <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince} />
     )
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
-    const CreditsComponent = () => (<Credits credits={this.state.creditList} />) 
+    const CreditsComponent = () => (<Credits credits={this.state.creditList} addCredit={this.addCredit} accountBalance={this.state.accountBalance}/>) 
     const DebitsComponent = () => (<Debits debits={this.state.debitList} addDebit={this.addDebit} accountBalance={this.state.accountBalance} />) 
 
     // Important: Include the "basename" in Router, which is needed for deploying the React app to GitHub Pages
@@ -58,6 +58,26 @@ class App extends Component {
         </div>
       </Router>
     );
+  }
+
+  //Add credit to credit array and update accountBalance
+  addCredit = (e) => {
+    e.preventDefault()
+    let creditInfo = e.target
+    //Create credit object to be added to array
+    let credit = {
+      id: this.state.creditList.length,
+      amount: creditInfo.amount.value,
+      description: creditInfo.description.value
+    };
+    //Format date and add to obj
+    let date = new Date()
+    credit.date = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    //Update balance and array
+    this.setState({
+      accountBalance: (this.state.accountBalance + credit.amount)
+    });
+    this.state.creditList.push(credit);
   }
 
   //Add debit to debit array & update accountBalance
@@ -75,7 +95,7 @@ class App extends Component {
     debit.date = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
     //Update balance and array
     this.setState({
-      accountBalance: (this.state.accountBalance - debit.amount).toFixed(2)
+      accountBalance: (this.state.accountBalance - debit.amount)
     });
     this.state.debitList.push(debit);
   }
