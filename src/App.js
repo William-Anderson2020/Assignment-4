@@ -99,6 +99,30 @@ class App extends Component {
     });
     this.state.debitList.push(debit);
   }
+
+  //Load existing credits/debits from specified api endpoints
+  async componentDidMount(){
+    //Call api
+    let creditList = await (await fetch('https://johnnylaicode.github.io/api/credits.json')).json();
+    let debitList = await (await fetch('https://johnnylaicode.github.io/api/debits.json')).json();
+    //Load total value of credits
+    let credits = 0
+    for(let x = 0; x < creditList.length; x++){
+      credits += creditList[x].amount
+    }
+    //Load total value of debits
+    let debits = 0
+    for(let x = 0; x < debitList.length; x++){
+      debits += debitList[x].amount
+    }
+    //Update state with existing values
+    this.setState({
+      accountBalance: this.state.accountBalance + credits - debits,
+      creditList: creditList,
+      debitList: debitList
+    })
+  }
+
 }
 
 export default App;
